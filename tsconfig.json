@@ -1,0 +1,34 @@
+{
+  "compilerOptions": {
+    "strictFunctionTypes": true,
+    "resolveJsonModule": true,
+    "moduleResolution": "node",
+    "module": "CommonJS",
+    "allowSyntheticDefaultImports": true,
+    "target": "es2017",
+    "lib": [
+      "es2017",
+      "dom"
+    ],
+    "jsx": "react",
+    "sourceMap": true,
+    "experimentalDecorators": true,
+    "noImplicitReturns": true,
+    "noImplicitAny": true,
+    "pretty": true,
+    "strict": true,
+
+    "outDir": "lib",
+    "baseUrl": ".",
+    "rootDir": ".",
+    "noImplicitThis": true,
+    "allowJs": false,
+    "paths": {
+        "*": ["./typings/*"]
+    }
+  },
+  "include": [
+    "./src/**/*",
+    "./test/**/*"
+  ]
+}
