@@ -4,12 +4,14 @@ import {stats, StatsEntry, userStats} from "./api/stats";
 import {userFromName} from "./api/user";
 
 import * as config from "../config.json";
+import {beTheHouse} from "./api/giveawy";
 
 enum CMDS {
     HELP = "help",
     TOP_PROFIT = "topProfit",
     TOP_WAGERED = "topWagered",
     USER = "user",
+    BE_THE_HOUSE = "beTheHouse",
 }
 
 const INVALID_CMD = "Invalid, use:";
@@ -38,7 +40,9 @@ const HELP_TEXT =
     `**${config.prefix}${CMDS.TOP_PROFIT}** [timeSpan], <timeSpan>: week | month | all\n` +
     `Shows users with the top profit for the selected time span.\n\n` +
     `**${config.prefix}${CMDS.USER} <username>**\n` +
-    `Shows stats of the given user.`;
+    `Shows stats of the given user.\n\n` +
+    `**${config.prefix}${CMDS.BE_THE_HOUSE}**\n` +
+    `Shows the the "be the house" giveaway stats.`;
 
 async function userStatsCmd(msg: string) {
     const cmd = msg.split(" ");
@@ -113,6 +117,13 @@ async function topWageredCmd(msg: string) {
     return help;
 }
 
+async function beTheHouseCmd() {
+    const res = await beTheHouse();
+
+    const resMsg = res.reduce((cur, x, i) => `${cur}\n${i + 1}. **${x.user.username}** - ${x.profit / 1e9} Eth`, "");
+    return `** Be the house giveaway - User profit**\n${resMsg}`;
+}
+
 client.on("message", async msg => {
     try {
         if (!msg.guild || msg.author.bot || msg.content.indexOf(config.prefix) !== 0) {
@@ -128,6 +139,8 @@ client.on("message", async msg => {
             await msg.channel.send(await userStatsCmd(msgStr));
         } else if (msgStr === CMDS.HELP) {
             await msg.channel.send(HELP_TEXT);
+        } else if (msgStr === CMDS.BE_THE_HOUSE) {
+            await msg.channel.send(await beTheHouseCmd());
         }
     } catch (ex) {
         console.log(`Exception: ${ex.message}`);
